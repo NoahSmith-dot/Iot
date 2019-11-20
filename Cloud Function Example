@@ -1,0 +1,50 @@
+// IT 250: Code  - 03: Playing a Tune Via Cloud
+// -----------------------------------
+#include "application.h"
+#define BUZZERPIN D4
+
+/////////////TUNES////////////////
+int Zelda[] = {1908,2551,2551,2273,2551,0,2024,1908};
+int Zeldaseq[] = {4,4,4,4,8,8,8,8};
+
+int Mario[] = {1500,1600,1700,1700,1800,2500,4000,1000};
+int Marioseq[] = {4,4,4,4,8,8,8,8};
+
+///////////TUNES LIST///////////
+/*
+        Tune 0 = "Zelda"
+        Tune 1 = "Mario"
+*/
+
+
+
+
+///////////SETUP/////////////
+void setup(){
+
+pinMode(BUZZERPIN, OUTPUT);
+Particle.function("PlayTune", PlayTune); 
+} 
+///////////LOOP/////////////
+void loop()
+{
+    
+}
+//////////PLAYER////////////
+int cloudplayer(int melody [], int melodySeq [], int size) {
+    
+    for (int note = 0; note < size; note++) {
+      int duration = 1000/melodySeq[note];
+      tone(BUZZERPIN, melody[note], duration);
+      delay(duration * 1.30);
+    }
+}
+/////////PLAYTUNE///////////
+int PlayTune(String cmd) {
+    if (cmd == "Zelda" || cmd == "zelda" || "Legend Of Zelda" || "Legend of Zelda" || "Legend of zelda" || "0") {
+        cloudplayer(Zelda, Zeldaseq, 8);}
+    else if (cmd == "Mario" || "mario" || "MARIO" || "1"){
+        cloudplayer(Mario, Marioseq, 8);
+    }
+    return 1;
+}
