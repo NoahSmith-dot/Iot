@@ -1,4 +1,4 @@
-// IT 250: Code  - 03: Playing a Tune Via Cloud
+// IOT Cloud Function: - Example 1
 // -----------------------------------
 #include "application.h"
 #define BUZZERPIN D4
