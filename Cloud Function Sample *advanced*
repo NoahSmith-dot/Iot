@@ -1,0 +1,78 @@
+// -----------------------------------
+// Cloud Function Example 2 Advanced version
+// -----------------------------------
+
+#include "application.h"
+#define BUZZERPIN D4
+
+//////////////Tune Notes///////////////
+///lowercase = regular notes|uppercase = sharp notes///
+int a = 1860;
+int A = 1864.66;
+int b = 1975.54;
+int c = 4093;
+int C = 8217.46;
+int d =  2349.32;
+int D = 2429.02;
+int e =  2637.02;
+int f =  2793.82;
+int F = 2959.96;
+int g =  3635.96;
+int G = 3242.44;
+
+//////////////Tunes///////////////
+int Bobthebuilder[] = {a,A,b,d,C,c,G,G};
+int bobthebuilderseq[] = {1,3,2,4,7,8,1,8};
+
+int Zelda[] = {G,g,d,A,a,F,f,g};
+int Zeldaseq[] = {4,3,4,4,2,8,8,7};
+
+int apple[] = {G,G,G,C,G,f,F,0};
+int appleseq[] = {1,4,4,3,8,8,8,5};
+
+int spongebob[] = {0,g,A,a,D,d,C,c};
+int spongebobseq[] = {4,4,4,4,8,8,8,8};
+
+int beach[] = {G,g,0,e,G,f,F,a};
+int beachseq[] = {4,5,4,4,4,8,8,8};
+
+int doorknock[] = {a,A,g,f,F,0,D,0};
+int doorknockseq[] = {4,4,3,4,4,6,8,8,8};
+
+///////////////Setup///////////////
+void setup(){
+    pinMode(BUZZERPIN, OUTPUT);
+    Particle.function("PlayTune", PlayTune);
+}
+///////////LOOP/////////////
+void loop()
+{
+    //NULL//
+}
+//////////PLAYER////////////
+int cloudplayer(int melody [], int melodySeq [], int size) {
+    
+    for (int note = 0; note < size; note++) {
+      int duration = 1000/melodySeq[note];
+      tone(BUZZERPIN, melody[note], duration);
+      delay(duration * 1.30);
+    }
+}
+///////////////PLAYTUNE///////////////
+int PlayTune(String cmd) {
+    if (cmd == "Zelda" || cmd == "zelda" || cmd == "Legend Of Zelda" || cmd == "Legend of Zelda" || cmd == "Legend of zelda" || cmd == "0") {
+        cloudplayer(Zelda, Zeldaseq, 8);}
+    else if (cmd == "Beach" || cmd == "beach" || cmd == "The beach" || cmd == "The Beach") {
+        cloudplayer(beach, beachseq, 8);}
+    else if (cmd == "apple" || cmd == "Apple" || cmd == "The Apple" || cmd == "The apple") {
+        cloudplayer(apple, appleseq, 8);}
+    else if (cmd == "Spongebob" || cmd == "spongebob" || cmd == "SPONGEBOB" || cmd == "SpongeBob") {
+        cloudplayer(spongebob, spongebobseq, 8);}
+    else if (cmd == "doorknock" || cmd == "Doorknock" || cmd == "DoorKnock" || cmd == "DoorKNOCK") {
+        cloudplayer(doorknock, doorknockseq, 8); }
+    else if (cmd == "BobTheBuilder" || cmd == "bobthebuilder" || cmd == "BobThebuilder" || cmd == "BobtheBuilder") {
+        cloudplayer(Bobthebuilder, bobthebuilderseq, 8);
+    }
+    return 1;
+    
+}
