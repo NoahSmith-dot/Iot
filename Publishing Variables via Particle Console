@@ -1,0 +1,47 @@
+// ---------------------------------------------------------
+//  Noah Smith- Publishing Variables via Particle Console
+// ---------------------------------------------------------
+#include "application.h"
+#include "Grove_4Digit_Display.h"
+
+//////////_Pin Definitions_//////////
+#define ROTARYPIN A0            // Deinfes the Rotary Pin onto the A0 pin
+#define CLK D4                  // Defines the D4&D5 pins for the 4 digit display
+#define DIO D5
+
+void dispNum(unsigned int num);
+
+TM1637 tm1637(CLK,DIO);
+int analogValue = 0;        // Value is 0 until Rotary pin is moved
+int voltage = 0;            // Voltage is 0 by default until Rotary pin is moved
+
+// This routine runs only once upon reset
+void setup()
+{
+  tm1637.set();                                 // This configures the 4 digit display
+  tm1637.init();                                // This clears the display before being turned at all
+}
+
+//////////Void LOOP//////////
+void loop()
+{
+  analogValue = analogRead(ROTARYPIN);          //  This reads the Rotary pins position
+  Particle.variable("number", analogValue);     //  Publishes the number on the display to the console
+  voltage = map(analogValue, 0, 4095, 0, 3300); //  This Calculates the voltage at any given time
+  Particle.variable("Voltage", voltage);        //  Publishes the voltage from the pin
+  dispNum(voltage);                             //  Displays the voltage at any given time onto the display
+  delay(200);//this delay on user manual is 50ms, sometimes it may result in flicker on Grove - 4-Digit Display. long delay time will reduce the reduce this appearance.
+}
+
+//This displays a integer value that is less then a value of 10,000
+void dispNum(unsigned int num)
+{
+  int8_t TimeDisp[] = {0x01,0x02,0x03,0x04};    // This limits the maximum amount to be displayed onto the display
+
+  if(num > 9999) num = 9999;
+  TimeDisp[0] = num / 1000;
+  TimeDisp[1] = num % 1000 / 100;
+  TimeDisp[2] = num % 100 / 10;
+  TimeDisp[3] = num % 10;
+  tm1637.display(TimeDisp);
+}
